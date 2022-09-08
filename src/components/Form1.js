@@ -2,45 +2,46 @@ import {
   TextField,
   Button
 } from '@mui/material'
+import { useDispatch } from '../context/UsersProvider'
 
 import useFormStyles from '../styles/useFormFields'
 
-const Form1 = ({ setStep = () => {} }) => {
+const Form1 = ({objForm}) => {
+
+  const {register, formState: { errors }} = objForm
+
+  const dispatch = useDispatch()
   const classes = useFormStyles()
 
-  const onSubmit = (event) => {
-    event.preventDefault()
-
-    setStep(1)
-  }
-
   return (
-    <form
-      onSubmit={onSubmit}
-    >
+    <>
       <TextField
         className={classes.formField}
         fullWidth
-        required
         id="name"
         label="Nombre"
         defaultValue={''}
+        {...register("name")} 
+        type="text"
+        error={Boolean(errors.name)} helperText={errors.name?.message}
       />
       <TextField
         className={classes.formField}
         fullWidth
-        required
         id="name"
         label="Apellido"
         defaultValue={''}
+        {...register("lastName")} 
+        type="text"
+        error={Boolean(errors.lastName)} helperText={errors.lastName?.message}
       />
       <Button
         variant="contained"
-        type="submit"
+        onClick={() => dispatch({type:'NEXT_STEP_FORM'})}
       >
         Siguiente
       </Button>
-    </form>
+      </>
   )
 }
 

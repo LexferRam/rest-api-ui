@@ -2,50 +2,52 @@ import {
   TextField,
   Button
 } from '@mui/material'
+import { useDispatch } from '../context/UsersProvider'
 
 import useFormStyles from '../styles/useFormFields'
 
-const Form2 = ({ setStep = () => {} }) => {
+const Form2 = ({objForm}) => {
+
+  const {register, formState: { errors }} = objForm
+
+  const dispatch = useDispatch()
   const classes = useFormStyles()
 
-  const onSubmit = (event) => {
-    event.preventDefault()
-  }
-
   return (
-    <form
-      onSubmit={onSubmit}
-    >
+    <>
       <TextField
         className={classes.formField}
         fullWidth
-        required
         type="email"
         id="email"
         label="E-mail"
         defaultValue={''}
+        {...register("email")} 
+        error={Boolean(errors.email)} helperText={errors.email?.message} 
       />
       <TextField
         className={classes.formField}
         fullWidth
-        required
         id="phoneNumber"
         label="Teléfono"
         defaultValue={''}
+        {...register("phoneNumber")} 
+        error={Boolean(errors.phoneNumber)} helperText={errors.phoneNumber?.message} 
       />
       <TextField
         className={classes.formField}
         fullWidth
-        required
         type="number"
         id="cc"
         label="Documento de identidad"
         defaultValue={''}
+        {...register("cc")} 
+        error={Boolean(errors.cc)} helperText={errors.cc?.message} 
       />
       <Button
         className={classes.formButtons}
         variant="outlined"
-        onClick={() => setStep(0)}
+        onClick={() => dispatch({type:'RESET_STEP_FORM'})}
       >
         Anterior
       </Button>
@@ -55,7 +57,7 @@ const Form2 = ({ setStep = () => {} }) => {
       >
         Enviar
       </Button>
-    </form>
+      </>
   )
 }
 

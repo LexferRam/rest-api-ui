@@ -4,9 +4,11 @@ import {
 } from 'react'
 
 import axios from 'axios'
+import { useDispatch } from '../context/UsersProvider'
 
 const useUsers = () => {
-  const [users, setUsers] = useState([])
+
+  const dispatch = useDispatch()
 
   /** GET USERS */
   useEffect(() => {
@@ -14,7 +16,8 @@ const useUsers = () => {
       try {
         const { data } = await axios.get(process.env.REACT_APP_USERS_URL)
 
-        setUsers(data)
+        dispatch({type: "GET_USERS", payload: data})
+
       } catch (err) {
         console.log('KO::USERS', err)
       }
@@ -23,9 +26,9 @@ const useUsers = () => {
     getUsers()
   }, [])
 
-  return {
-    users
-  }
+  // return {
+  //   users
+  // }
 }
 
 export default useUsers
