@@ -8,10 +8,9 @@ import EditUserDialog from './components/EditUserDialog'
 const App = () => {
 
   return (
-    <Container
-      fixed
+    <div
       style={{
-        padding: '3em'
+        padding: '5em 2em'
       }}
     >
       <DeleteUserDialog />
@@ -23,7 +22,7 @@ const App = () => {
         <StepperSection />
         <TableSection />
       </Grid>
-    </Container>
+    </div>
   )
 }
 

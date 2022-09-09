@@ -1,12 +1,13 @@
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material'
 import { useDispatch, useUsersData } from '../context/UsersProvider'
 import useFormStyles from '../styles/useFormFields'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { schema } from '../utils';
 import { yupResolver } from '@hookform/resolvers/yup';
+import NumberFormat from 'react-number-format';
 
 const EditUserDialog = () => {
 
@@ -18,7 +19,7 @@ const EditUserDialog = () => {
         resolver: yupResolver(schema),
     })
 
-    const { register, handleSubmit, formState: { errors }, reset, setValue } = objForm;
+    const { register, handleSubmit, formState: { errors }, reset, setValue, control } = objForm;
 
     const onSubmit = async (updatedUser) => {
         dispatch({ type: 'CLOSE_EDIT_USER_DIALOG' })
@@ -36,7 +37,7 @@ const EditUserDialog = () => {
         setValue("email", selectedUser.email)
         setValue("phoneNumber", selectedUser.phoneNumber)
         setValue("cc", selectedUser.cc)
-    },[selectedUser])
+    }, [selectedUser])
 
     return (
         <Dialog
@@ -81,15 +82,27 @@ const EditUserDialog = () => {
                             {...register("email")}
                             error={Boolean(errors.email)} helperText={errors.email?.message}
                         />
-                        <TextField
-                            className={classes.formField}
-                            fullWidth
-                            id="phoneNumber"
-                            label="Teléfono"
-                            // defaultValue={selectedUser.phoneNumber}
-                            {...register("phoneNumber")}
-                            error={Boolean(errors.phoneNumber)} helperText={errors.phoneNumber?.message}
+
+                        <Controller
+                            name="phoneNumber"
+                            control={control}
+                            placeholder="+(__) ____ ___-__-__"
+                            render={({ field }) => (
+                                <NumberFormat
+                                    className={classes.formField}
+                                    fullWidth
+                                    label="Teléfono"
+                                    mask=" "
+                                    customInput={TextField}
+                                    format={`+(##) #### ### ####`}
+                                    defaultValue={selectedUser.phoneNumber}
+                                    {...register("phoneNumber")}
+                                    error={Boolean(errors.phoneNumber)} helperText={errors.phoneNumber?.message}
+                                    {...field}
+                                />
+                            )}
                         />
+
                         <TextField
                             className={classes.formField}
                             fullWidth

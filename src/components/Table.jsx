@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress,
   IconButton,
   Tooltip,
   TablePagination
@@ -16,8 +15,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import axios from 'axios'
 import { useDispatch, useUsersData } from '../context/UsersProvider'
+import useTableStyles from '../styles/useTableStyles';
+import TableSkeleton from './TableSkeleton';
 
 const TableData = () => {
+
+  const classes = useTableStyles()
 
   const { users, usersLoaded, page } = useUsersData()
   const dispatch = useDispatch()
@@ -46,16 +49,17 @@ const TableData = () => {
     getUsers()
   }, [])
 
-  if (!usersLoaded) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}><CircularProgress color="primary" /></div>
+  if (!usersLoaded) return <TableSkeleton />
 
   return (
     <>
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', minHeight: 425 }} elevation={7}>
       <TableContainer
         component={Paper}
+        sx={{ minHeight: 425 }}
       >
         <Table>
-          <TableHead>
+          <TableHead className={classes.tableHead}>
             <TableRow>
               <TableCell>
                 <strong>Nombre</strong>
@@ -81,6 +85,7 @@ const TableData = () => {
             {users?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, key) => (
               <TableRow
                 key={key}
+                className={classes.tableRow}
               >
                 <TableCell>
                   {user.name}
@@ -121,7 +126,7 @@ const TableData = () => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10]}
+        rowsPerPageOptions={[5]}
         component="div"
         count={users.length}
         rowsPerPage={rowsPerPage}
