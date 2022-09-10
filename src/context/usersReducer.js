@@ -5,7 +5,12 @@ export const initialState = {
     openDeleteUserDialog: false,
     openEditUserDialog: false,
     selectedUser: {},
-    page: 0
+    page: 0,
+    snackbar: {
+        open: false,
+        label: '',
+        severity: 'success',
+    }
 }
 
 const usersReducer = (state, action) => {
@@ -46,6 +51,15 @@ const usersReducer = (state, action) => {
 
         case 'HANDLE_CHANGE_PAGE':
             return { ...state, page: payload }
+
+        case 'OPEN_SNACKBAR_NOTIFICATION':
+            return { ...state, snackbar: { ...state.snackbar, ...payload, open: true, severity:'success' } }
+
+        case 'CLOSE_SNACKBAR_NOTIFICATION':
+            return { ...state, snackbar: { ...state.snackbar, open: false } }
+
+        case 'OPEN_SNACKBAR_NOTIFICATION_ERROR':
+            return { ...state, snackbar: { ...state.snackbar, open: true, label: 'Error cargando data.', severity:'error' } }
 
         default:
             return state

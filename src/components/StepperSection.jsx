@@ -1,5 +1,4 @@
 import {
-    Container,
     Step,
     Stepper,
     StepLabel,
@@ -39,14 +38,20 @@ const StepperSection = () => {
 
     const onSubmit = async (newUser) => {
 
-        dispatch({ type: 'RESET_USERS' })
-        await axios.post(process.env.REACT_APP_USERS_URL, newUser);
+        try {
+            dispatch({ type: 'RESET_USERS' })
+            await axios.post(process.env.REACT_APP_USERS_URL, newUser);
 
-        const { data: users } = await axios.get(process.env.REACT_APP_USERS_URL)
-        dispatch({ type: "GET_USERS", payload: users })
-        dispatch({ type: 'RESET_STEP_FORM' })
+            const { data: users } = await axios.get(process.env.REACT_APP_USERS_URL)
+            dispatch({ type: "GET_USERS", payload: users })
+            dispatch({ type: 'RESET_STEP_FORM' })
+            dispatch({ type: 'OPEN_SNACKBAR_NOTIFICATION', payload: { label: "Usuario agregado exitosamente!" } })
 
-        reset();
+            reset();
+        } catch (error) {
+            dispatch({ type: 'OPEN_SNACKBAR_NOTIFICATION_ERROR' })
+
+        }
     }
 
     return (

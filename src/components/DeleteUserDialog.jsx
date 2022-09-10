@@ -34,6 +34,7 @@ const DeleteUserDialog = () => {
                         const { data: users } = await axios.get(process.env.REACT_APP_USERS_URL)
                         dispatch({ type: "GET_USERS", payload: users })
                         dispatch({type:'HANDLE_CHANGE_PAGE', payload: 0})
+                        dispatch({ type: 'OPEN_SNACKBAR_NOTIFICATION', payload:{label: "Usuario eliminado exitosamente!"} })
                     }} 
                     autoFocus>
                         Eliminar

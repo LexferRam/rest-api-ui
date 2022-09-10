@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, TextField } from '@mui/material'
 import { useDispatch, useUsersData } from '../context/UsersProvider'
 import useFormStyles from '../styles/useFormFields'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -22,13 +22,18 @@ const EditUserDialog = () => {
     const { register, handleSubmit, formState: { errors }, reset, setValue, control } = objForm;
 
     const onSubmit = async (updatedUser) => {
-        dispatch({ type: 'CLOSE_EDIT_USER_DIALOG' })
-        dispatch({ type: 'RESET_USERS' })
-        await axios.put(`${process.env.REACT_APP_USERS_URL}/${selectedUser._id}`, updatedUser);
+        try {
+            dispatch({ type: 'CLOSE_EDIT_USER_DIALOG' })
+            dispatch({ type: 'RESET_USERS' })
+            await axios.put(`${process.env.REACT_APP_USERS_URL}/${selectedUser._id}`, updatedUser);
 
-        const { data: users } = await axios.get(process.env.REACT_APP_USERS_URL)
-        dispatch({ type: "GET_USERS", payload: users })
-        reset();
+            const { data: users } = await axios.get(process.env.REACT_APP_USERS_URL)
+            dispatch({ type: "GET_USERS", payload: users })
+            dispatch({ type: 'OPEN_SNACKBAR_NOTIFICATION', payload: { label: "Usuario editado exitosamente!" } })
+            reset();
+        } catch (error) {
+            dispatch({ type: 'OPEN_SNACKBAR_NOTIFICATION_ERROR' })
+        }
     }
 
     useEffect(() => {
@@ -37,7 +42,7 @@ const EditUserDialog = () => {
         setValue("email", selectedUser.email)
         setValue("phoneNumber", selectedUser.phoneNumber)
         setValue("cc", selectedUser.cc)
-    }, [selectedUser])
+    }, [selectedUser, setValue])
 
     return (
         <Dialog

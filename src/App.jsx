@@ -1,9 +1,10 @@
-import { Container, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 
 import StepperSection from './components/StepperSection'
 import TableSection from './components/TableSection'
 import DeleteUserDialog from './components/DeleteUserDialog'
 import EditUserDialog from './components/EditUserDialog'
+import SnackbarNotification from './components/SnackbarNotification'
 
 const App = () => {
 
@@ -13,6 +14,7 @@ const App = () => {
         padding: '5em 2em'
       }}
     >
+      <SnackbarNotification />
       <DeleteUserDialog />
       <EditUserDialog />
       <Grid

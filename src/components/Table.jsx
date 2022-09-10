@@ -27,12 +27,12 @@ const TableData = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (event, newPage) => {
-    dispatch({type:'HANDLE_CHANGE_PAGE', payload: newPage})
+    dispatch({ type: 'HANDLE_CHANGE_PAGE', payload: newPage })
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    dispatch({type:'HANDLE_CHANGE_PAGE', payload: 0})
+    dispatch({ type: 'HANDLE_CHANGE_PAGE', payload: 0 })
   };
 
   useEffect(() => {
@@ -42,98 +42,99 @@ const TableData = () => {
         dispatch({ type: "GET_USERS", payload: data })
 
       } catch (err) {
-        console.log('KO::USERS', err)
+        if(err.request) dispatch({ type: 'OPEN_SNACKBAR_NOTIFICATION_ERROR'})
+        dispatch({ type: 'OPEN_SNACKBAR_NOTIFICATION_ERROR' })
       }
     }
 
     getUsers()
-  }, [])
+  }, [dispatch])
 
   if (!usersLoaded) return <TableSkeleton />
 
   return (
     <>
-    <Paper sx={{ width: '100%', overflow: 'hidden', minHeight: 425 }} elevation={7}>
-      <TableContainer
-        component={Paper}
-        sx={{ minHeight: 425 }}
-      >
-        <Table>
-          <TableHead className={classes.tableHead}>
-            <TableRow>
-              <TableCell>
-                <strong>Nombre</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Apellido</strong>
-              </TableCell>
-              <TableCell>
-                <strong>E-mail</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Teléfono</strong>
-              </TableCell>
-              <TableCell>
-                <strong>C.C.</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Acciones</strong>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, key) => (
-              <TableRow
-                key={key}
-                className={classes.tableRow}
-              >
+      <Paper sx={{ width: '100%', overflow: 'hidden', minHeight: 425 }} elevation={7}>
+        <TableContainer
+          component={Paper}
+          sx={{ minHeight: 425 }}
+        >
+          <Table>
+            <TableHead className={classes.tableHead}>
+              <TableRow>
                 <TableCell>
-                  {user.name}
+                  <strong>Nombre</strong>
                 </TableCell>
                 <TableCell>
-                  {user.lastName}
+                  <strong>Apellido</strong>
                 </TableCell>
                 <TableCell>
-                  {user.email}
+                  <strong>E-mail</strong>
                 </TableCell>
                 <TableCell>
-                  {user.phoneNumber}
+                  <strong>Teléfono</strong>
                 </TableCell>
                 <TableCell>
-                  {user.cc}
+                  <strong>C.C.</strong>
                 </TableCell>
                 <TableCell>
-                  <Tooltip title="Editar">
-                    <IconButton color="primary" onClick={() => {
-                      dispatch({ type: 'SELECT_USER', payload: user._id})
-                      dispatch({ type: 'OPEN_EDIT_USER_DIALOG' })
-                    }}>
-                      <EditRoundedIcon fontSize='medium' />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Eliminar">
-                    <IconButton color="secondary" onClick={() => {
-                      dispatch({ type: 'SELECT_USER', payload: user._id })
-                      dispatch({ type: 'OPEN_DELETE_USER_DIALOG' })
-                    }}>
-                      <DeleteIcon fontSize='medium' />
-                    </IconButton>
-                  </Tooltip>
+                  <strong>Acciones</strong>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5]}
-        component="div"
-        count={users.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+            </TableHead>
+            <TableBody>
+              {users?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, key) => (
+                <TableRow
+                  key={key}
+                  className={classes.tableRow}
+                >
+                  <TableCell>
+                    {user.name}
+                  </TableCell>
+                  <TableCell>
+                    {user.lastName}
+                  </TableCell>
+                  <TableCell>
+                    {user.email}
+                  </TableCell>
+                  <TableCell>
+                    {user.phoneNumber}
+                  </TableCell>
+                  <TableCell>
+                    {user.cc}
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip title="Editar">
+                      <IconButton color="primary" onClick={() => {
+                        dispatch({ type: 'SELECT_USER', payload: user._id })
+                        dispatch({ type: 'OPEN_EDIT_USER_DIALOG' })
+                      }}>
+                        <EditRoundedIcon fontSize='medium' />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Eliminar">
+                      <IconButton color="secondary" onClick={() => {
+                        dispatch({ type: 'SELECT_USER', payload: user._id })
+                        dispatch({ type: 'OPEN_DELETE_USER_DIALOG' })
+                      }}>
+                        <DeleteIcon fontSize='medium' />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5]}
+          component="div"
+          count={users.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
     </>
   )

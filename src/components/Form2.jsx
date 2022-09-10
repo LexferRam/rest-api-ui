@@ -9,7 +9,6 @@ import NumberFormat from 'react-number-format';
 
 import useFormStyles from '../styles/useFormFields'
 import { Controller } from 'react-hook-form';
-import { useState } from 'react';
 
 const Form2 = ({ objForm }) => {
 

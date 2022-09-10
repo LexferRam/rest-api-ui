@@ -1,7 +1,7 @@
 import * as yup from "yup"
 
 const nameValidation = (name) => {
-    var regexp =/ /; // /^[a-z]{4,} /i
+    var regexp =/ /;
     const valid = regexp.test(name);
 
     return !valid ? {
@@ -36,7 +36,7 @@ export const schema = yup.object().shape({
         else {
           return true;
         }
-      }).required("Nombre es requerido").trim("Ingrese su nombre"),
+      }).required("Nombre es requerido").matches(/^[aA-zZ\s]+$/, "No se permiten números ó caracteres especiales en el nombre").trim("Ingrese su nombre"),
     lastName: yup.string().test('validator-custom-name', function (value) {
         const validation = lastNameValidation(value);
         if (!validation.isValid) {
@@ -48,7 +48,7 @@ export const schema = yup.object().shape({
         else {
           return true;
         }
-      }).required("Apellido es requerido").trim(),
+      }).required("Apellido es requerido").matches(/^[aA-zZ\s]+$/, "No se permiten números ó caracteres especiales en el apellido").trim(),
     email: yup.string().email("Debe ser un mail valido").required("Email es requerido").trim(),
     phoneNumber: yup.string().required("Ingrese un número de teléfono").trim().min(19, 'Ingrese el número de teléfono completo').typeError('Ingrese un número de teléfono'),
     cc: yup.number().positive("Debe ser un nro positivo").required("Ingrese un número de identidad").typeError('Ingrese un número de identidad'),
